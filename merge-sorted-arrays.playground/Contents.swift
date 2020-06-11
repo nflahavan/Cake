@@ -2,10 +2,40 @@ import Foundation
 
 func mergeArrays(_ myArray: [Int], _ alicesArray: [Int]) -> [Int] {
   
-  // combine the sorted arrays into one large sorted array
+  var mergedArray: [Int] = []
+  mergedArray.reserveCapacity(myArray.count + alicesArray.count)
   
+  var my = 0
+  var alice = 0
   
-  return []
+  while my < myArray.count {
+    
+    guard alice < alicesArray.count else {
+      
+      let remainingFromMine = myArray[my...]
+      mergedArray.append(contentsOf: remainingFromMine)
+      break
+    }
+    
+    if myArray[my] < alicesArray[alice] {
+    
+      mergedArray.append(myArray[my])
+      my += 1
+      
+    } else {
+      
+      mergedArray.append(alicesArray[alice])
+      alice += 1
+    }
+  }
+  
+  if alice < alicesArray.count {
+    
+    let remainingFromAlice = alicesArray[alice...]
+    mergedArray.append(contentsOf: remainingFromAlice)
+  }
+  
+  return mergedArray
 }
 
 
