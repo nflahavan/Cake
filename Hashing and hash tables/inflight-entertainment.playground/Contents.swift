@@ -1,4 +1,26 @@
 func canTwoMovies(in movieLengths: [Int], fillFlight flightLength: Int) -> Bool {
+  canTwoMoviesSecondTry(in: movieLengths, fillFlight: flightLength)
+}
+
+func canTwoMoviesSecondTry(in movieLengths: [Int], fillFlight flightLength: Int) -> Bool {
+  
+  var movieLengthsSet = Set<Int>()
+  
+  for length in movieLengths {
+    
+    let matchingLength = flightLength - length
+    
+    if movieLengthsSet.contains(matchingLength) {
+      return true
+    }
+    
+    movieLengthsSet.insert(length)
+  }
+  
+  return false
+}
+
+func canTwoMoviesFirstTry(in movieLengths: [Int], fillFlight flightLength: Int) -> Bool {
   
   var movieDict: [Int: Int] = [:]
   
@@ -35,8 +57,6 @@ func canTwoMovies(in movieLengths: [Int], fillFlight flightLength: Int) -> Bool 
   
   return false
 }
-
-
 
 
 
