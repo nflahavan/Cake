@@ -1,4 +1,26 @@
 func hasPalindromePermutation(in theString: String) -> Bool {
+  hasPalindromePermutationSecondTry(in: theString)
+}
+
+func hasPalindromePermutationSecondTry(in theString: String) -> Bool {
+  
+  var oddOccurancesSet = Set<String.Element>()
+  
+  for char in theString {
+    
+    if oddOccurancesSet.contains(char) {
+      
+      oddOccurancesSet.remove(char)
+    } else {
+      
+      oddOccurancesSet.insert(char)
+    }
+  }
+  
+  return oddOccurancesSet.count <= 1
+}
+
+func hasPalindromePermutationFirstTry(in theString: String) -> Bool {
   
   var charOccurancesDict = [Character: Int]()
   
@@ -30,9 +52,6 @@ func hasPalindromePermutation(in theString: String) -> Bool {
   
   return true
 }
-
-
-
 
 
 
