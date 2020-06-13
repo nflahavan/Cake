@@ -1,5 +1,14 @@
 import Foundation
 
+let string = ""
+let beginWordIndex = string.startIndex
+let endWordIndex = string.endIndex
+var substring = string[beginWordIndex..<endWordIndex]
+substring = substring.dropFirst()
+print(substring)
+print(string)
+
+
 extension Character {
   func isLetter() -> Bool {
     return "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(self)
@@ -19,12 +28,39 @@ class WordCloudData {
   }
   
   private func populateWordsToCounts(_ input: String) {
+        
+    var beginWordIndex = input.startIndex
+    var endWordIndex = beginWordIndex
     
-    guard !input.isEmpty else { return }
-    
-    var beginningWordIndex = input.startIndex
-    
-    
+    while true {
+      
+      let isEndOfInput = endWordIndex == input.endIndex
+      
+      guard isEndOfInput || !(input[endWordIndex].isLetter() || input[endWordIndex].isWordConnector()) else {
+        
+        endWordIndex = input.index(after: endWordIndex)
+        continue
+      }
+        
+      let wordCandidate = input[beginWordIndex..<endWordIndex].trimmingCharacters(in: CharacterSet(charactersIn: "'-"))
+      
+      if !wordCandidate.isEmpty {
+        
+        let word = wordCandidate.lowercased()
+        
+        if wordsToCounts[word] != nil {
+          
+          wordsToCounts[word]! += 1
+        } else {
+          
+          wordsToCounts[word] = 1
+        }
+      }
+      
+      if endWordIndex == input.endIndex { break }
+      endWordIndex = input.index(after: endWordIndex)
+      beginWordIndex = endWordIndex
+    }
   }
 }
 
@@ -60,7 +96,7 @@ class Tests: XCTestCase {
     let wordCloud = WordCloudData(input)
     
     let actual = wordCloud.wordsToCounts
-    let expected = ["I": 1, "like": 1, "cake": 1]
+    let expected = ["i": 1, "like": 1, "cake": 1]
     XCTAssertEqual(actual, expected)
   }
   
