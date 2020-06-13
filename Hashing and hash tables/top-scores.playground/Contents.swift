@@ -1,9 +1,30 @@
 func sortScores(_ unsortedScores: [Int], withHighest highestPossibleScore: Int) -> [Int] {
   
-  // sort the scores in O(n) time
+  var scoresCounts = Array(repeating: 0, count: highestPossibleScore + 1)
   
+  for score in unsortedScores {
   
-  return []
+    scoresCounts[score] += 1
+  }
+  
+  print(scoresCounts.compactMap({ $0 != 0 ? $0 : nil}))
+  var sortedScores = Array(repeating: 0, count: unsortedScores.count)
+  var sortedScoresIndex = sortedScores.startIndex
+  
+  for score in scoresCounts.indices.reversed() {
+
+    let scoreCount = scoresCounts[score]
+    
+    guard scoreCount > 0 else { continue }
+    
+    for _ in 0..<scoreCount {
+      
+      sortedScores[sortedScoresIndex] = score
+      sortedScoresIndex = sortedScores.index(after: sortedScoresIndex)
+    }
+  }
+  
+  return sortedScores
 }
 
 
@@ -59,6 +80,11 @@ class Tests: XCTestCase {
     XCTAssertEqual(actual, expected)
   }
   
+  func testHighLowScores() {
+    let actual = sortScores([0, 0, 100, 100], withHighest: 100)
+    let expected = [100, 100, 0, 0]
+    XCTAssertEqual(actual, expected)
+  }
   static let allTests = [
     ("testNoScores", testNoScores),
     ("testOneScore", testOneScore),
