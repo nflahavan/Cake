@@ -126,6 +126,15 @@ class Tests: XCTestCase {
     XCTAssertEqual(actual, expected)
   }
   
+  func testSingleQuoteAfterWord() {
+    let input = "Chris' car is very fast."
+    let wordCloud = WordCloudData(input)
+    
+    let actual = wordCloud.wordsToCounts
+    let expected = ["chris": 1, "car": 1, "is": 1, "very": 1, "fast": 1]
+    XCTAssertEqual(actual, expected)
+  }
+  
   func testNoValidWords() {
     let input = "1234~!_#!--"
     let wordCloud = WordCloudData(input)
@@ -143,7 +152,8 @@ class Tests: XCTestCase {
     ("testEllipsesBetweenWords", testEllipsesBetweenWords),
     ("testApostrophes", testApostrophes),
     ("testDashOutsideHyphenatedWords", testDashOutsideHyphenatedWords),
-    ("testNoValidWords", testNoValidWords)
+    ("testNoValidWords", testNoValidWords),
+    ("testSingleQuoteAfterWord", testSingleQuoteAfterWord)
   ]
 }
 
