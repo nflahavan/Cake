@@ -1,8 +1,12 @@
 import Foundation
 
 extension Character {
-  func isPartOfWord() -> Bool {
-    return "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-'".contains(self)
+  func isLetter() -> Bool {
+    return "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".contains(self)
+  }
+  
+  func isWordConnector() -> Bool {
+    return "'-".contains(self)
   }
 }
 
@@ -16,7 +20,9 @@ class WordCloudData {
   
   private func populateWordsToCounts(_ input: String) {
     
-    // count the frequency of each word
+    guard !input.isEmpty else { return }
+    
+    var beginningWordIndex = input.startIndex
     
     
   }
@@ -120,7 +126,14 @@ class Tests: XCTestCase {
     XCTAssertEqual(actual, expected)
   }
   
-  
+  func testNoValidWords() {
+    let input = "1234~!_#!--"
+    let wordCloud = WordCloudData(input)
+    
+    let actual = wordCloud.wordsToCounts
+    let expected = [String:Int]()
+    XCTAssertEqual(actual, expected)
+  }
   
   static let allTests = [
     ("testSimpleSentence", testSimpleSentence),
@@ -128,7 +141,9 @@ class Tests: XCTestCase {
     ("testPunctuation", testPunctuation),
     ("testHyphenatedWords", testHyphenatedWords),
     ("testEllipsesBetweenWords", testEllipsesBetweenWords),
-    ("testApostrophes", testApostrophes)
+    ("testApostrophes", testApostrophes),
+    ("testDashOutsideHyphenatedWords", testDashOutsideHyphenatedWords),
+    ("testNoValidWords", testNoValidWords)
   ]
 }
 
