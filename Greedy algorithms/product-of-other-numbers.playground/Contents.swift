@@ -1,9 +1,23 @@
 func getProductsOfAllIntsExceptAtIndex(_ ints: [Int]) -> [Int]? {
+  guard ints.count > 1 else { return nil }
   
-  // make an array with the products
+  var products = Array(repeating: 0, count: ints.count)
   
+  var currProd = 1
   
-  return nil
+  for i in 0..<ints.count {
+    products[i] = currProd
+    currProd *= ints[i]
+  }
+  
+  currProd = 1
+  
+  for i in (0..<ints.count).reversed() {
+    products[i] *= currProd
+    currProd *= ints[i]
+  }
+  
+  return products
 }
 
 
