@@ -24,7 +24,33 @@ class BinaryTreeNode {
 }
 
 func isBalanced(treeRoot: BinaryTreeNode) -> Bool {
-  
+  secondTry(treeRoot)
+}
+
+func secondTry(_ root: BinaryTreeNode) -> Bool {
+  var stack = [(root, 0)]
+  var maxLeafDepth: Int?
+  while let curr = stack.popLast() {
+    if let left = curr.0.left, let right = curr.0.right {
+      stack.append((left, curr.1 + 1))
+      stack.append((right, curr.1 + 1))
+    } else if let left = curr.0.left {
+      stack.append((left, curr.1 + 1))
+    } else if let right = curr.0.right {
+      stack.append((right, curr.1 + 1))
+    } else if let maxLeaf = maxLeafDepth {
+      guard abs(maxLeaf - curr.1) < 2 else {
+        return false
+      }
+      maxLeafDepth = max(maxLeaf, curr.1)
+    } else {
+      maxLeafDepth = curr.1
+    }
+  }
+  return true
+}
+
+func firstTry(_ root: BinaryTreeNode) -> Bool {
   // determine if the tree is superbalanced
   func minMaxLeafDepth(from root: BinaryTreeNode) -> (Int, Int) {
     if let left = root.left, let right = root.right {
@@ -48,12 +74,9 @@ func isBalanced(treeRoot: BinaryTreeNode) -> Bool {
     }
   }
   
-  let minMax = minMaxLeafDepth(from: treeRoot)
+  let minMax = minMaxLeafDepth(from: root)
   return (minMax.1 - minMax.0) <= 1
 }
-
-
-
 
 
 
