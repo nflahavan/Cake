@@ -60,6 +60,22 @@ func color(graph: [GraphNode], withColors colors: [String]) throws {
   }
 }
 
+func providedSolutionColor(graph: [GraphNode], withColors colors: [String]) throws {
+  
+  for node in graph {
+    
+    if node.neighbors.contains(node) {
+      throw InvalidGraph.graphHasLoop
+    }
+    
+    // get the node's neighbors' colors, as a set so we
+    // can check if a color is illegal in constant time
+    let illegalColors = Set(node.neighbors.compactMap { $0.color })
+    
+    // assign the first legal color
+    node.color = colors.first { !illegalColors.contains($0) }!
+  }
+}
 
 
 
