@@ -180,3 +180,76 @@ func assertEqual(_ actual: [String]?, _ expected: [String]) {
 }
 
 Tests.defaultTestSuite.run()
+
+
+// given answer
+// I actually think my space complexity is the same as theirs?
+
+enum ShortestPathError: String, Error, CustomStringConvertible {
+    case startNodeNotInGraph = "Start node not in graph"
+    case endNodeNotInGraph = "End node not in graph"
+
+    var description: String {
+        return self.rawValue
+    }
+}
+
+func reconstructPath(howWeReachedNodes: [String: String],
+                     startNode: String, endNode: String) -> [String]  {
+
+    var reversedShortestPath: [String] = []
+
+    // start from the end of the path and work backwards
+    var currentNode: String! = endNode
+
+    while currentNode != nil && currentNode.count > 0 {
+        reversedShortestPath.append(currentNode)
+        currentNode = howWeReachedNodes[currentNode]
+    }
+
+    // reverse our path to get the right order
+    reversedShortestPath.reverse()  // flip it around, in place
+    return reversedShortestPath  // no longer reversed
+}
+
+func bfsGetPath(graph: [String: [String]],
+                startNode: String, endNode: String) throws -> [String]? {
+
+    guard graph[startNode] != nil else {
+        throw ShortestPathError.startNodeNotInGraph
+    }
+
+    guard graph[endNode] != nil else {
+        throw ShortestPathError.endNodeNotInGraph
+    }
+
+    var nodesToVisit = Queue<String>()
+    nodesToVisit.enqueue(startNode)
+
+    // keep track of how we got to each node
+    // we'll use this to reconstruct the shortest path at the end
+    // we'll ALSO use this to keep track of which nodes we've
+    // already visited
+    var howWeReachedNodes: [String: String] = [:]
+    howWeReachedNodes[startNode] = ""
+
+    while let currentNode = nodesToVisit.dequeue() {
+
+        // stop when we reach the end node
+        if currentNode == endNode {
+            return reconstructPath(howWeReachedNodes: howWeReachedNodes,
+                                   startNode: startNode, endNode: endNode)
+        }
+
+        for neighbor in graph[currentNode]! {
+            if howWeReachedNodes[neighbor] == nil {
+                nodesToVisit.enqueue(neighbor)
+                howWeReachedNodes[neighbor] = currentNode
+            }
+        }
+    }
+
+    // if we get here, then we never found the end node
+    // so there's NO path from startNode to endNode
+    return nil
+}
