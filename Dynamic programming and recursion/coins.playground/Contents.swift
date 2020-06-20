@@ -1,20 +1,34 @@
 func changePossibilities(amount: Int, denominations: [Int]) -> Int {
-  guard amount > 0 else { return 1 }
-  guard !denominations.isEmpty else { return 0 }
+  var memo = [Int:[[Int]:Int]]()
   
-  let sortedDenominations = denominations.sorted()
-  let lowestDenomination = sortedDenominations.first!
-  let otherDenominations = Array(denominations[1..<denominations.endIndex])
-  var numLowestDenom = amount / lowestDenomination
-  var poss = 0
-  
-  while numLowestDenom >= 0 {
-    let remainder = amount - numLowestDenom * lowestDenomination
-    poss += changePossibilities(amount: remainder, denominations: otherDenominations)
-    numLowestDenom -= 1
+  func memoChangePoss(_ amount: Int, _ denominations: [Int]) -> Int {
+    
+    guard amount > 0 else { return 1 }
+    guard !denominations.isEmpty else { return 0 }
+    if let poss = memo[amount]?[denominations] { return poss }
+    
+    let sortedDenominations = denominations.sorted()
+    let lowestDenomination = sortedDenominations.first!
+    let otherDenominations = Array(denominations[1..<denominations.endIndex])
+    var numLowestDenom = amount / lowestDenomination
+    var poss = 0
+    
+    while numLowestDenom >= 0 {
+      let remainder = amount - numLowestDenom * lowestDenomination
+      poss += memoChangePoss(remainder, otherDenominations)
+      numLowestDenom -= 1
+    }
+    
+    if memo[amount] != nil {
+      memo[amount]?[denominations] = poss
+    } else {
+      memo[amount] = [denominations: poss]
+    }
+    
+    return poss
   }
   
-  return poss
+  return memoChangePoss(amount, denominations)
 }
 
 
