@@ -1,11 +1,34 @@
-func getPermutations(for inputString: String) -> Set<String> {
-  
-  // generate all permutations of the input string
-  
-  
-  return []
-}
+import Foundation
 
+func getPermutations(for inputString: String) -> Set<String> {
+  guard inputString.count > 1 else {
+    return Set<String>(arrayLiteral: inputString)
+  }
+  
+  var perms = Set<String>()
+  
+  for i in 0..<inputString.count {
+    var str = inputString
+    
+    let first = String(str[str.startIndex])
+    let ithIndex = str.index(str.startIndex, offsetBy: i)
+    let ith = String(str[ithIndex])
+    
+    str.replaceSubrange(ithIndex...ithIndex, with: first)
+    str.replaceSubrange(str.startIndex...str.startIndex, with: ith)
+    
+    let substr = str[str.index(after: str.startIndex)..<str.endIndex]
+    let subPerms = getPermutations(for: String(substr))
+    
+    for subPerm in subPerms {
+      var subPermMutable = subPerm
+      subPermMutable.insert(contentsOf: ith, at: subPermMutable.startIndex)
+      perms.insert(subPermMutable)
+    }
+  }
+  
+  return perms
+}
 
 
 
