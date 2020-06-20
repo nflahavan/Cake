@@ -1,4 +1,25 @@
 func fib(_ n: UInt) -> UInt {
+  
+  if n == 0 {
+    return 0
+  } else if n == 1 {
+    return 1
+  }
+  
+  var nMinusTwo: UInt = 0
+  var nMinusOne: UInt = 1
+  
+  for _ in 2...n {
+    let ithFib = nMinusOne + nMinusTwo
+    nMinusTwo = nMinusOne
+    nMinusOne = ithFib
+  }
+  
+  return nMinusOne
+}
+
+
+func recursiveFib(_ n: UInt) -> UInt {
   var memo: [UInt: UInt] = [0: 0, 1: 1]
   
   func memoFib(_ n: UInt) -> UInt {
