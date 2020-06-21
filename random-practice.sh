@@ -1,4 +1,3 @@
-# URL=https://www.google.com
-# open -a "Google Chrome" $URL
+URLS=(https://www.google.com https://www.espn.com https://www.interviewcake.com https://www.npsfoothealth.com)
 NUM=$(($RANDOM%4))
-echo "random number: $NUM"
+open -a "Google Chrome" ${URLS[$NUM]}
