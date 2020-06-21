@@ -1,2 +1,2 @@
-echo "hello world"
-open -a "Google Chrome" https://www.google.com
+URL=https://www.google.com
+open -a "Google Chrome" $URL
